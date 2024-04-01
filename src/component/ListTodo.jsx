@@ -21,16 +21,17 @@ const ListTodo = () => {
         alert('Bạn đã xóa thành công')
     };
     const handleCheckboxChange = (id) => {
-        const newCheckedIds = todos.includes(id)
-            ? todos.filter((checkedId) => checkedId !== id)
-            : [...todos, id];
-        setCheckedIds(newCheckedIds);
+        // const newCheckedIds = todos.includes(id)
+        //     ? todos.filter((checkedId) => checkedId !== id)
+        //     : [...todos, id];
+        // setCheckedIds(newCheckedIds);
 
         const newTodoList = todos.map((item) => {
-            if (item.id === id) {
+            if (item.id == id) {
                 return { ...item, done: !item.done };
             }
             return item;
+
         });
         setTodos(newTodoList);
     };
