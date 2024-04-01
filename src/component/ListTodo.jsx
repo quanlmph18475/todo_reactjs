@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AddTodo from './AddTodo'
-import Remove from './Remove';
 
 const ListTodo = () => {
     const [todos, setTodos] = useState([]);
-    const [checkedItems, setCheckedItems] = useState([]);
+    const [checkedIds, setCheckedIds] = useState([]);
 
     const addTodo = (newTodo) => {
         setTodos([...todos, newTodo]);
@@ -21,10 +20,26 @@ const ListTodo = () => {
         }).then(() => setTodos(todos.filter((todo) => todo.id != id)))
         alert('Bạn đã xóa thành công')
     };
-    const handleCheckboxChange = (item) => {
-        const updatedItems = [...checkedItems];
-        updatedItems[item] = !updatedItems[item];
-        setCheckedItems(updatedItems);
+    const handleCheckboxChange = (id) => {
+        const newCheckedIds = todos.includes(id)
+            ? todos.filter((checkedId) => checkedId !== id)
+            : [...todos, id];
+        setCheckedIds(newCheckedIds);
+
+        const newTodoList = todos.map((item) => {
+            if (item.id === id) {
+                return { ...item, done: !item.done };
+            }
+            return item;
+        });
+        setTodos(newTodoList);
+    };
+
+    const handleChecked = () => {
+        // const uncheckedTodos = todos.map((item) => !checkedIds.includes(item.id));
+        // setTodos(uncheckedTodos);
+        // setCheckedIds([]);
+        setTodos(todos.filter(task => !task.done));
     };
 
 
@@ -36,24 +51,24 @@ const ListTodo = () => {
                     <>
                         <div className="row shadow-none p-2 mb-5 bg-light rounded" key={item.id}>
                             <div className="col-5 px-4 d-flex justify-content-start" >
-                                <label
+
+
+                                <label style={item.done ? { textDecoration: "line-through" } : null}
                                     className="form-check-label text-primary"
-                                    htmlFor={`checkbox-${item.id}`}
-                                    style={{
-                                        textDecoration: checkedItems[item.id] ? "line-through" : "none"
-                                    }}
+
                                 >
                                     <input
                                         className="form-check-input"
                                         type="checkbox"
-                                        id={`checkbox-${item.id}`}
-                                        checked={checkedItems[item.id]}
+                                        checked={item.done}
                                         onChange={() => handleCheckboxChange(item.id)}
                                         readOnly
                                     />
                                     {item.name}
                                 </label>
                             </div>
+
+
                             <div className="col-6 d-flex justify-content-end">
                                 <Link to={`update/${item.id}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +95,22 @@ const ListTodo = () => {
                     </>
                 )
             })} <br />
-            <Remove/>
+            <div className="row">
+                <div className="col">
+                    <div className="text-center py-2 bg-warning">
+                        {todos.filter((item) => item.done).length} of {todos.length} tasks done
+                    </div>
+                </div>
+                <div className="col">
+                    <button
+                        type="submit"
+                        onClick={handleChecked}
+                        className="text-center w-100 border border-primary py-2 bg-primary opacity-75 text-light"
+                    >
+                        Kiểm tra checked <span className="fw-bolder">X</span>
+                    </button>
+                </div>
+            </div>
         </>
     )
 }

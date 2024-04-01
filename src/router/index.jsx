@@ -4,7 +4,6 @@ import ListTodo from '../component/ListTodo'
 import UpdateTodo from '../component/UpdateTodo'
 import AddTodo from '../component/AddTodo'
 import Todo from '../page/Todo'
-import Remove from '../component/Remove'
 
 const Routers = () => {
     const [todos, setTodos] = useState([]);
@@ -19,7 +18,6 @@ const Routers = () => {
                     <Route index element={<ListTodo />} />
                     <Route path="update/:id" element={<UpdateTodo />} />
                     <Route path="add" element={<AddTodo addTodo={addTodo} />} />
-                    <Route path='check' element={<Remove />} />
                 </Route>
             </Routes>
         </>
